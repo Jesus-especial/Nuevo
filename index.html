@@ -3819,8 +3819,7 @@
             const setupIsVisible = !configScreen.classList.contains('hidden');
             const launchIsVisible = !launchScreen.classList.contains('hidden');
             const resultsScreenIsVisible = !setupIsVisible && !launchIsVisible;
-            const keepPanelVisible = window.matchMedia('(max-width: 760px)').matches;
-            panel.classList.toggle('hidden', !resultsScreenIsVisible || (!isRunning && !keepPanelVisible));
+            panel.classList.toggle('hidden', !resultsScreenIsVisible);
             document.querySelector('.workspace').classList.toggle('hidden', !resultsScreenIsVisible);
             document.querySelector('.bottom-bar').classList.toggle('hidden', !resultsScreenIsVisible);
         }
