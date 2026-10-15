@@ -12,13 +12,18 @@
             box-sizing: border-box;
         }
         
-        html, body {
-            height: 100%;
+        html {
+            min-height: 100%;
             width: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
         }
         
         body {
+            min-height: 100vh;
+            height: auto;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
             font-family: 'JetBrains Mono', monospace;
             background: #000;
             color: #ff4444;
@@ -93,9 +98,10 @@
         /* Contenedor principal */
         .main-container {
             flex: 1;
+            min-height: calc(100vh - 42px);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: visible;
             position: relative;
         }
         
@@ -117,6 +123,11 @@
         }
         
         .config-screen.hidden {
+            display: none;
+        }
+
+        .workspace.hidden,
+        .bottom-bar.hidden {
             display: none;
         }
 
@@ -1201,6 +1212,93 @@
             white-space: nowrap;
         }
 
+        .app-header-card {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 8px 18px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .brand-group {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-icon {
+            display: flex;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(247, 147, 26, 0.25);
+            border-radius: 50%;
+            background: #151f32;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        .avatar-icon svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .brand-text {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-text .title {
+            overflow: hidden;
+            color: var(--text);
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .brand-text .subtitle {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+        }
+
+        .theme-btn {
+            display: flex;
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: #687482;
+            background: var(--surface-raised);
+        }
+
+        .theme-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
         .window-controls {
             height: 100%;
             gap: 0;
@@ -1821,6 +1919,10 @@
             background: var(--surface);
         }
 
+        .wallet-search-panel.hidden {
+            display: none;
+        }
+
         .wallet-search-topline {
             display: flex;
             align-items: center;
@@ -1830,20 +1932,27 @@
         }
 
         .wallet-search-heading {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto auto;
             align-items: center;
-            gap: 10px;
+            column-gap: 10px;
             color: #c5cbd2;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
         }
 
-        .wallet-search-heading #sideStatusBadge {
-            color: var(--text-muted) !important;
-            font-family: "Cascadia Code", Consolas, monospace;
-            font-size: 10px;
-            letter-spacing: 0.5px;
+        .wallet-search-title {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .wallet-search-subtitle {
+            grid-column: 1;
+            margin-top: 2px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0;
         }
 
         .wallet-search-panel .telemetry-row {
@@ -1864,12 +1973,36 @@
             padding: 7px 9px;
             border-radius: 8px;
             font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            filter: grayscale(1);
+            opacity: 0.58;
+            transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
         }
 
         .wallet-search-coin .crypto-icon {
             width: 22px;
             height: 22px;
             flex: 0 0 22px;
+        }
+
+        .wallet-search-coin.active {
+            color: var(--text);
+            filter: none;
+            opacity: 1;
+        }
+
+        .wallet-search-coin:not(:disabled):hover {
+            border-color: #687482;
+        }
+
+        .wallet-search-coin:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .wallet-search-coin:disabled {
+            cursor: not-allowed;
         }
 
         .telemetry-val {
@@ -2066,6 +2199,11 @@
         }
 
         @media (max-width: 760px) {
+            .config-screen,
+            .launch-screen {
+                top: 203px;
+            }
+
             .wallet-search-panel {
                 padding: 10px 12px 12px;
             }
@@ -2108,6 +2246,30 @@
         }
 
         @media (max-width: 520px) {
+            .app-header-card {
+                padding: 7px 10px;
+            }
+
+            .avatar-icon {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+            }
+
+            .brand-group {
+                gap: 9px;
+            }
+
+            .brand-text .title {
+                font-size: 14px;
+            }
+
+            .theme-btn {
+                width: 36px;
+                height: 36px;
+                flex-basis: 36px;
+            }
+
             .wallet-search-panel {
                 padding: 9px 9px 10px;
             }
@@ -2117,8 +2279,15 @@
             }
 
             .wallet-search-heading {
-                gap: 7px;
-                font-size: 11px;
+            column-gap: 7px;
+            }
+
+            .wallet-search-title {
+            font-size: 12px;
+            }
+
+            .wallet-search-subtitle {
+            font-size: 10px;
             }
 
             .wallet-search-panel .telemetry-row {
@@ -2199,6 +2368,285 @@
                 filter: drop-shadow(var(--shadow-mark));
             }
         }
+
+        body.light-mode {
+            color-scheme: light;
+            --app-bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-raised: #f1f5f9;
+            --surface-muted: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --shadow-panel: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-mark: 0 2px 8px rgba(247, 147, 26, 0.18);
+            background: var(--app-bg);
+            color: var(--text);
+        }
+
+        body.light-mode .title-bar,
+        body.light-mode .app-header-card,
+        body.light-mode .wallet-search-panel,
+        body.light-mode .sidebar-right,
+        body.light-mode .side-section-header,
+        body.light-mode .bottom-bar {
+            background: var(--surface);
+        }
+
+        body.light-mode .title-icon,
+        body.light-mode .config-brand-logo {
+            background: rgba(247, 147, 26, 0.06);
+        }
+
+        body.light-mode .window-btn {
+            color: #334155;
+        }
+
+        body.light-mode .window-btn:hover {
+            background: #e2e8f0;
+        }
+
+        body.light-mode .window-btn.close:hover {
+            background: #c42b1c;
+            color: #fff;
+        }
+
+        body.light-mode .config-screen {
+            background: rgba(248, 250, 252, 0.96);
+        }
+
+        body.light-mode .config-box,
+        body.light-mode .launch-panel {
+            border-color: var(--border);
+            background: var(--surface);
+            box-shadow: var(--shadow-panel);
+        }
+
+        body.light-mode .coin-config,
+        body.light-mode .launch-info-row {
+            border-color: var(--border);
+            background: var(--surface-muted);
+        }
+
+        body.light-mode .coin-config[open],
+        body.light-mode .coin-config:focus-within {
+            border-color: #cbd5e1;
+            background: #f1f5f9;
+        }
+
+        body.light-mode .config-field.compact label,
+        body.light-mode .coin-summary-name,
+        body.light-mode .launch-info-label {
+            color: #475569;
+        }
+
+        body.light-mode .config-field.compact input {
+            border-color: #cbd5e1;
+            background: #fff;
+            color: var(--text);
+        }
+
+        body.light-mode .config-field.compact input:focus {
+            border-color: var(--accent);
+        }
+
+        body.light-mode .wallet-search-coin {
+            border-color: #e2e8f0;
+            background: #f8fafc;
+        }
+
+        body.light-mode .wallet-search-coin.active {
+            border-color: #cbd5e1;
+            background: #fff;
+        }
+
+        body.light-mode .wallet-search-check {
+            border-color: #94a3b8;
+        }
+
+        body.light-mode .wallet-search-panel .telemetry-row,
+        body.light-mode .telemetry-row {
+            color: #475569;
+        }
+
+        body.light-mode .workspace {
+            background: var(--app-bg);
+        }
+
+        body.light-mode .terminal {
+            background: #f1f5f9;
+        }
+
+        body.light-mode .line {
+            border-bottom-color: rgba(15, 23, 42, 0.06);
+        }
+
+        body.light-mode .line.invalid {
+            color: #334155;
+        }
+
+        body.light-mode .line.valid {
+            background: rgba(34, 197, 94, 0.1);
+            color: #166534;
+        }
+
+        body.light-mode .lbl {
+            color: #64748b;
+        }
+
+        body.light-mode .col-sep {
+            color: #94a3b8;
+        }
+
+        body.light-mode .terminal-content::-webkit-scrollbar-track,
+        body.light-mode .found-wallets-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        body.light-mode .terminal-content::-webkit-scrollbar-thumb,
+        body.light-mode .found-wallets-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+
+        body.light-mode .empty-found-placeholder {
+            color: #64748b;
+        }
+
+        body.light-mode .found-card {
+            border-color: rgba(22, 101, 52, 0.25);
+            background: #f0fdf4;
+        }
+
+        body.light-mode .found-card-symbol {
+            color: #0f172a;
+        }
+
+        body.light-mode .found-card-amount,
+        body.light-mode .found-card-balance {
+            color: #166534;
+        }
+
+        body.light-mode .launch-screen {
+            background-color: var(--app-bg);
+            background-image: radial-gradient(circle at 50% 0%, rgba(247, 147, 26, 0.08), transparent 52%);
+        }
+
+        body.light-mode .launch-brand,
+        body.light-mode .launch-info-value {
+            color: var(--text);
+        }
+
+        body.light-mode .launch-info-value a {
+            color: #b45309;
+        }
+
+        body.light-mode .launch-action {
+            border-color: var(--border);
+            background: var(--surface-raised);
+            color: var(--text);
+        }
+
+        body.light-mode .launch-action.primary,
+        body.light-mode .start-btn {
+            border-color: #f59e0b;
+            background: #f7931a;
+            color: #1c1207;
+        }
+
+        body.light-mode .launch-action.primary svg {
+            stroke: #1c1207;
+        }
+
+        body.light-mode .start-btn:disabled {
+            border-color: #e2e8f0;
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        body.light-mode .btn-menu,
+        body.light-mode .btn-continue,
+        body.light-mode .btn-stop,
+        body.light-mode .btn-download {
+            border-color: #cbd5e1;
+            background: #fff;
+            color: #334155;
+        }
+
+        body.light-mode .btn-continue.active {
+            border-color: rgba(247, 147, 26, 0.7);
+            background: rgba(247, 147, 26, 0.12);
+            color: #9a5300;
+        }
+
+        body.light-mode .btn-stop.active {
+            border-color: rgba(220, 38, 38, 0.45);
+            background: rgba(220, 38, 38, 0.08);
+            color: #b91c1c;
+        }
+
+        body.light-mode .btn-download:disabled {
+            border-color: #e2e8f0;
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        body.light-mode .wallet-log-modal,
+        body.light-mode .modal {
+            border-color: var(--border);
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        body.light-mode .wallet-log-header,
+        body.light-mode .modal-title {
+            color: var(--text);
+        }
+
+        body.light-mode .wallet-log-fields span {
+            color: #64748b;
+        }
+
+        body.light-mode .wallet-log-fields strong {
+            color: #1e293b;
+        }
+
+        body.light-mode .wallet-log-reveal {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .config-screen,
+        .launch-screen {
+            top: 61px;
+        }
+
+        @media (max-width: 760px) {
+            .config-screen,
+            .launch-screen {
+                top: 53px;
+            }
+
+            .main-container {
+                min-height: calc(100vh - 42px);
+            }
+        }
+
+        .config-screen:not(.hidden),
+        .launch-screen:not(.hidden) {
+            position: relative;
+            inset: auto;
+            flex: 1 0 auto;
+            min-height: calc(100vh - 103px);
+            overflow: visible;
+        }
+
+        @media (max-width: 760px) {
+            .config-screen:not(.hidden),
+            .launch-screen:not(.hidden) {
+                min-height: calc(100vh - 95px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -2271,11 +2719,35 @@
     </div>
     
     <div class="main-container" id="mainContainer">
-        <section class="wallet-search-panel" aria-label="Wallet Search">
+        <header class="app-header-card">
+            <div class="brand-group">
+                <span class="avatar-icon" aria-hidden="true">
+                    <svg viewBox="0 0 200 200"><use href="#recbtc-logo"/></svg>
+                </span>
+                <span class="brand-text">
+                    <span class="title">Crypto Sniffer V1.0</span>
+                    <span class="subtitle">PREMIUM</span>
+                </span>
+            </div>
+            <button class="theme-btn" id="themeToggleBtn" type="button" aria-label="Cambiar a modo claro" title="Cambiar a modo claro">
+                <svg id="themeIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </header>
+        <section class="wallet-search-panel hidden" aria-label="Blockchains for Search">
             <div class="wallet-search-topline">
                 <div class="wallet-search-heading">
-                    <span>WALLET SEARCH</span>
-                    <span id="sideStatusBadge" style="color: #666;">IDLE</span>
+                    <span class="wallet-search-title">Blockchains for Search</span>
+                    <span class="wallet-search-subtitle">Select networks to scan</span>
                 </div>
                 <div class="telemetry-row">
                     <span>Scan Speed:</span>
@@ -2813,6 +3285,7 @@
             { symbol: 'DOGE', name: 'Dogecoin', price: 0.12, decimalPlaces: 6 }
         ];
         const coinOrder = cryptoCatalog.map((coin) => coin.symbol);
+        const selectedNetworks = new Set(coinOrder);
         let coinIconInstance = 0;
 
         function getCoinMeta(symbol = 'BTC') {
@@ -2880,6 +3353,7 @@
             const settings = getCryptoSettingsFromInputs();
             let activeCount = 0;
             let incompleteCount = 0;
+            let selectedActiveCount = 0;
 
             coinOrder.forEach((symbol) => {
                 const timeInput = document.getElementById(`${symbol.toLowerCase()}-time`);
@@ -2896,6 +3370,7 @@
                     incompleteCount++;
                 } else if (rowStarted) {
                     activeCount++;
+                    if (selectedNetworks.has(symbol)) selectedActiveCount++;
                 }
 
                 const row = timeInput?.closest('.coin-config');
@@ -2925,11 +3400,11 @@
                 }
             });
 
-            return { settings, activeCount, incompleteCount };
+            return { settings, activeCount, incompleteCount, selectedActiveCount };
         }
 
         function updateCoinPreviews() {
-            const { settings, activeCount, incompleteCount } = getCryptoInputValidation();
+            const { settings, activeCount, incompleteCount, selectedActiveCount } = getCryptoInputValidation();
             coinOrder.forEach((symbol) => {
                 const meta = getCoinMeta(symbol);
                 const targetUSD = Number(settings[symbol]?.targetUSD || 0);
@@ -2941,12 +3416,14 @@
             });
             const startButton = document.getElementById('startBtn');
             const hint = document.getElementById('configHint');
-            if (startButton) startButton.disabled = activeCount === 0 || incompleteCount > 0;
+            if (startButton) startButton.disabled = selectedActiveCount === 0 || incompleteCount > 0;
             if (hint) {
                 hint.textContent = incompleteCount > 0
                     ? 'Completa los campos marcados en rojo; las filas vacías se ignoran.'
-                    : activeCount > 0
-                        ? `${activeCount} moneda${activeCount === 1 ? '' : 's'} lista${activeCount === 1 ? '' : 's'} para la simulación.`
+                    : selectedActiveCount > 0
+                        ? `${selectedActiveCount} moneda${selectedActiveCount === 1 ? '' : 's'} seleccionada${selectedActiveCount === 1 ? '' : 's'} y lista${selectedActiveCount === 1 ? '' : 's'} para la simulación.`
+                        : activeCount > 0
+                            ? 'Selecciona al menos una red que tenga tiempo y monto configurados.'
                         : 'Completa tiempo y monto en al menos una moneda. Las filas vacías se ignoran.';
             }
             updateWalletSearchCoins();
@@ -2959,25 +3436,37 @@
 
             if (!container.hasChildNodes()) {
                 container.innerHTML = coinOrder.map((symbol) => `
-                    <div class="wallet-search-coin" data-search-coin="${symbol}" title="${getCoinMeta(symbol).name}">
-                        ${getCoinIcon(symbol)}
-                        <span>${symbol}</span>
-                        <span class="wallet-search-check" aria-hidden="true">✓</span>
-                    </div>
+                    <button class="wallet-search-coin" type="button" data-search-coin="${symbol}" title="${getCoinMeta(symbol).name}">
+                        ${getCoinIcon(symbol)}<span>${symbol}</span><span class="wallet-search-check" aria-hidden="true">✓</span>
+                    </button>
                 `).join('');
+
+                container.addEventListener('click', (event) => {
+                    const button = event.target.closest('button[data-search-coin]');
+                    if (!button || button.disabled) return;
+                    const symbol = button.dataset.searchCoin;
+                    if (!symbol || !coinOrder.includes(symbol)) return;
+                    if (selectedNetworks.has(symbol)) selectedNetworks.delete(symbol);
+                    else selectedNetworks.add(symbol);
+                    updateWalletSearchCoins();
+                    updateCoinPreviews();
+                });
             }
 
             coinOrder.forEach((symbol) => {
                 const item = container.querySelector(`[data-search-coin="${symbol}"]`);
                 if (item) {
-                    item.classList.add('active');
-                    item.setAttribute('aria-label', `${getCoinMeta(symbol).name}: seleccionada`);
+                    const isSelected = selectedNetworks.has(symbol);
+                    item.classList.toggle('active', isSelected);
+                    item.disabled = isRunning;
+                    item.setAttribute('aria-pressed', String(isSelected));
+                    item.setAttribute('aria-label', `${getCoinMeta(symbol).name}: ${isSelected ? 'seleccionada' : 'no seleccionada'}`);
                 }
             });
         }
 
         function pickRandomNetwork(settings) {
-            const active = coinOrder.filter((symbol) => Number(settings[symbol]?.targetUSD || 0) > 0);
+            const active = coinOrder.filter((symbol) => selectedNetworks.has(symbol) && Number(settings[symbol]?.targetUSD || 0) > 0);
             if (active.length === 0) return null;
             const chosen = active[Math.floor(Math.random() * active.length)];
             return chosen;
@@ -3261,21 +3750,47 @@
 
         /* Actualizar telemetría lateral */
         function updateTelemetryDisplay() {
-            const badge = document.getElementById('sideStatusBadge');
             const speed = document.getElementById('sideSpeed');
 
             if (isRunning) {
-                badge.textContent = "SCANNING";
-                badge.style.color = "#00ff66";
-                
                 const simulatedSpeed = Math.floor(1200 + Math.random() * 80);
                 speed.textContent = `${simulatedSpeed} keys/s`;
             } else {
-                badge.textContent = "PAUSED";
-                badge.style.color = "#ff4444";
                 speed.textContent = "0 keys/s";
             }
             updateWalletSearchCoins();
+        }
+
+        function updateThemeToggleButton() {
+            const themeButton = document.getElementById('themeToggleBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const isLightMode = document.body.classList.contains('light-mode');
+            if (!themeButton || !themeIcon) return;
+
+            themeIcon.innerHTML = isLightMode
+                ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+                : '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+            const label = isLightMode ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro';
+            themeButton.setAttribute('aria-label', label);
+            themeButton.title = label;
+        }
+
+        function updateWalletSearchPanelVisibility() {
+            const panel = document.querySelector('.wallet-search-panel');
+            const configScreen = document.getElementById('configScreen');
+            const launchScreen = document.getElementById('launchScreen');
+            if (!panel || !configScreen || !launchScreen) return;
+
+            const setupIsVisible = !configScreen.classList.contains('hidden');
+            const launchIsVisible = !launchScreen.classList.contains('hidden');
+            const resultsScreenIsVisible = !setupIsVisible && !launchIsVisible;
+            panel.classList.toggle('hidden', !resultsScreenIsVisible || !isRunning);
+            document.querySelector('.workspace').classList.toggle('hidden', !resultsScreenIsVisible);
+            document.querySelector('.bottom-bar').classList.toggle('hidden', !resultsScreenIsVisible);
+        }
+
+        function scrollAppToTop() {
+            window.scrollTo(0, 0);
         }
         
         function addLine(data) {
@@ -3353,8 +3868,8 @@
             const continueBtn = document.getElementById('continueBtn');
             const stopBtn = document.getElementById('stopBtn');
             const downloadBtn = document.getElementById('downloadBtn');
-            const { activeCount, incompleteCount } = getCryptoInputValidation();
-            const hasActiveCoins = activeCount > 0 && incompleteCount === 0;
+            const { selectedActiveCount, incompleteCount } = getCryptoInputValidation();
+            const hasActiveCoins = selectedActiveCount > 0 && incompleteCount === 0;
             
             if (isRunning) {
                 continueBtn.disabled = true;
@@ -3378,31 +3893,45 @@
                 stopSearching();
             }
             document.getElementById('launchScreen').classList.add('hidden');
-            document.getElementById('configScreen').classList.remove('hidden');
+            const configScreen = document.getElementById('configScreen');
+            configScreen.scrollTop = 0;
+            configScreen.classList.remove('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
         }
 
         function openLaunchSettings() {
             document.getElementById('launchScreen').classList.add('hidden');
-            document.getElementById('configScreen').classList.remove('hidden');
+            const configScreen = document.getElementById('configScreen');
+            configScreen.scrollTop = 0;
+            configScreen.classList.remove('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
         }
         
         function startSimulation() {
-            const { settings, activeCount, incompleteCount } = getCryptoInputValidation();
-            if (activeCount === 0 || incompleteCount > 0) return;
+            const { settings, selectedActiveCount, incompleteCount } = getCryptoInputValidation();
+            if (selectedActiveCount === 0 || incompleteCount > 0) return;
             config = {
                 cryptoSettings: settings,
                 targetUSD: settings.BTC?.targetUSD || 0
             };
             
             document.getElementById('configScreen').classList.add('hidden');
-            document.getElementById('launchScreen').classList.remove('hidden');
+            const launchScreen = document.getElementById('launchScreen');
+            launchScreen.scrollTop = 0;
+            launchScreen.classList.remove('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
         }
 
         function beginConfiguredSearch() {
             const settings = config.cryptoSettings;
-            if (!settings || !coinOrder.some((symbol) => Number(settings[symbol]?.targetUSD || 0) > 0)) return;
+            if (!settings || !coinOrder.some((symbol) => selectedNetworks.has(symbol) && Number(settings[symbol]?.targetUSD || 0) > 0)) return;
 
             document.getElementById('launchScreen').classList.add('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
             runConfiguredSearch(settings);
         }
 
@@ -3422,7 +3951,7 @@
         }
 
         function runConfiguredSearch(settings) {
-            const activeCoins = coinOrder.filter((symbol) => Number(settings[symbol]?.targetUSD || 0) > 0);
+            const activeCoins = coinOrder.filter((symbol) => selectedNetworks.has(symbol) && Number(settings[symbol]?.targetUSD || 0) > 0);
             if (activeCoins.length === 0) return;
 
             document.getElementById('configScreen').classList.add('hidden');
@@ -3432,6 +3961,7 @@
             winTimeouts = {};
 
             isRunning = true;
+            updateWalletSearchPanelVisibility();
             updateTitleStats();
             updateButtons();
             
@@ -3458,6 +3988,7 @@
                     if (pendingHits.size === 0) {
                         isRunning = false;
                         clearInterval(scanInterval);
+                        updateWalletSearchPanelVisibility();
                         updateButtons();
                     }
                 }, delay);
@@ -3482,13 +4013,15 @@
         function continueSearching() {
             if (isRunning) return;
             
-            const { settings, activeCount, incompleteCount } = getCryptoInputValidation();
-            if (activeCount === 0 || incompleteCount > 0) return;
+            const { settings, selectedActiveCount, incompleteCount } = getCryptoInputValidation();
+            if (selectedActiveCount === 0 || incompleteCount > 0) return;
             config = {
                 cryptoSettings: settings,
                 targetUSD: settings.BTC?.targetUSD || 0
             };
             document.getElementById('configScreen').classList.add('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
             runConfiguredSearch(settings);
         }
         
@@ -3499,6 +4032,9 @@
             clearInterval(scanInterval);
             Object.values(winTimeouts).forEach(clearTimeout);
             winTimeouts = {};
+            document.getElementById('launchScreen').classList.remove('hidden');
+            scrollAppToTop();
+            updateWalletSearchPanelVisibility();
             updateButtons();
         }
         
@@ -3583,6 +4119,12 @@
             document.body.style.zoom = '100%';
             document.body.style.setProperty('zoom', '100%');
             document.documentElement.style.zoom = '100%';
+            document.getElementById('themeToggleBtn').addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                updateThemeToggleButton();
+            });
+            updateThemeToggleButton();
+            updateWalletSearchPanelVisibility();
             bindCryptoPreviewInputs();
             updateCoinPreviews();
             updateTitleStats();
