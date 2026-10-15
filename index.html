@@ -1376,6 +1376,193 @@
             font-size: 11px;
         }
 
+        .config-box {
+            max-width: 860px;
+        }
+
+        .config-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .coin-config {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .coin-config[open] {
+            border-color: #4b5561;
+            background: #14181d;
+        }
+
+        .coin-config.has-error:not([open]) {
+            border-color: rgba(237, 106, 106, 0.62);
+        }
+
+        .coin-header {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto 16px;
+            align-items: center;
+            gap: 12px;
+            min-height: 68px;
+            margin: 0;
+            padding: 10px 14px;
+            color: var(--text);
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+        }
+
+        .coin-header::-webkit-details-marker {
+            display: none;
+        }
+
+        .coin-header::marker {
+            content: "";
+        }
+
+        .coin-header:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .coin-header:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -3px;
+        }
+
+        .coin-icon-tile {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border: 1px solid #343b44;
+            border-radius: 9px;
+            background: #0d1014;
+        }
+
+        .coin-icon-tile .crypto-icon {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+        }
+
+        .coin-summary-copy {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .coin-summary-title {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .coin-summary-symbol {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .coin-summary-name {
+            overflow: hidden;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 400;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .coin-price {
+            color: var(--text-muted);
+            font-family: "Cascadia Code", Consolas, monospace;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .coin-row-status {
+            display: block;
+            margin-top: 2px;
+            color: #8b949e;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .coin-config.is-configured .coin-row-status {
+            color: var(--success);
+        }
+
+        .coin-config.has-error .coin-row-status {
+            color: var(--danger);
+        }
+
+        .coin-chevron {
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid #8b949e;
+            border-bottom: 1.5px solid #8b949e;
+            transform: rotate(45deg) translateY(-2px);
+            transition: transform 0.18s ease;
+        }
+
+        .coin-config[open] .coin-chevron {
+            transform: rotate(225deg) translate(-1px, -1px);
+        }
+
+        .coin-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            padding: 2px 14px 14px 68px;
+        }
+
+        .coin-fields .config-field.compact {
+            margin: 0;
+        }
+
+        .coin-preview {
+            grid-column: 1 / -1;
+            min-height: 0;
+        }
+
+        @media (max-width: 520px) {
+            .config-grid {
+                gap: 8px;
+            }
+
+            .coin-header {
+                grid-template-columns: 40px minmax(0, 1fr) auto 14px;
+                min-height: 64px;
+                gap: 9px;
+                padding: 9px 10px;
+            }
+
+            .coin-icon-tile {
+                width: 40px;
+                height: 40px;
+            }
+
+            .coin-summary-name {
+                font-size: 11px;
+            }
+
+            .coin-price {
+                font-size: 11px;
+            }
+
+            .coin-fields {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 10px;
+                padding: 0 10px 12px;
+            }
+
+            .coin-preview {
+                grid-column: auto;
+            }
+        }
+
         .start-btn {
             min-height: 46px;
             border: 1px solid #ffad4d;
@@ -1988,109 +2175,109 @@
                 <div class="config-title">Configurar simulación</div>
 
                 <div class="config-grid">
-                    <div class="coin-config" data-coin="btc">
-                        <div class="coin-header"><span class="coin-badge">BTC</span><span class="coin-price">$68,500</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="btc-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="btc">
+                        <summary class="coin-header" aria-controls="btc-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">BTC</span><span class="coin-summary-name">Bitcoin</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$68,500</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="btc-fields">
+                            <div class="config-field compact"><label for="btc-time">Tiempo de acierto (s)</label><input type="number" id="btc-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="btc-usd">Monto a encontrar (USD)</label><input type="text" id="btc-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="btc-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="btc-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="btc-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="eth">
-                        <div class="coin-header"><span class="coin-badge">ETH</span><span class="coin-price">$2,900</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="eth-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="eth">
+                        <summary class="coin-header" aria-controls="eth-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">ETH</span><span class="coin-summary-name">Ethereum</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$2,900</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="eth-fields">
+                            <div class="config-field compact"><label for="eth-time">Tiempo de acierto (s)</label><input type="number" id="eth-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="eth-usd">Monto a encontrar (USD)</label><input type="text" id="eth-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="eth-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="eth-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="eth-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="bnb">
-                        <div class="coin-header"><span class="coin-badge">BNB</span><span class="coin-price">$560</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="bnb-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="bnb">
+                        <summary class="coin-header" aria-controls="bnb-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">BNB</span><span class="coin-summary-name">BNB</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$560</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="bnb-fields">
+                            <div class="config-field compact"><label for="bnb-time">Tiempo de acierto (s)</label><input type="number" id="bnb-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="bnb-usd">Monto a encontrar (USD)</label><input type="text" id="bnb-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="bnb-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="bnb-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="bnb-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="ltc">
-                        <div class="coin-header"><span class="coin-badge">LTC</span><span class="coin-price">$85</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="ltc-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="ltc">
+                        <summary class="coin-header" aria-controls="ltc-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">LTC</span><span class="coin-summary-name">Litecoin</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$85</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="ltc-fields">
+                            <div class="config-field compact"><label for="ltc-time">Tiempo de acierto (s)</label><input type="number" id="ltc-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="ltc-usd">Monto a encontrar (USD)</label><input type="text" id="ltc-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="ltc-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="ltc-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="ltc-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="trx">
-                        <div class="coin-header"><span class="coin-badge">TRX</span><span class="coin-price">$0.12</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="trx-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="trx">
+                        <summary class="coin-header" aria-controls="trx-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">TRX</span><span class="coin-summary-name">TRON</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$0.12</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="trx-fields">
+                            <div class="config-field compact"><label for="trx-time">Tiempo de acierto (s)</label><input type="number" id="trx-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="trx-usd">Monto a encontrar (USD)</label><input type="text" id="trx-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="trx-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="trx-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="trx-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="sol">
-                        <div class="coin-header"><span class="coin-badge">SOL</span><span class="coin-price">$150</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="sol-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="sol">
+                        <summary class="coin-header" aria-controls="sol-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">SOL</span><span class="coin-summary-name">Solana</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$150</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="sol-fields">
+                            <div class="config-field compact"><label for="sol-time">Tiempo de acierto (s)</label><input type="number" id="sol-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="sol-usd">Monto a encontrar (USD)</label><input type="text" id="sol-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="sol-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="sol-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="sol-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="xrp">
-                        <div class="coin-header"><span class="coin-badge">XRP</span><span class="coin-price">$0.65</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="xrp-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="xrp">
+                        <summary class="coin-header" aria-controls="xrp-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">XRP</span><span class="coin-summary-name">Ripple</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$0.65</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="xrp-fields">
+                            <div class="config-field compact"><label for="xrp-time">Tiempo de acierto (s)</label><input type="number" id="xrp-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="xrp-usd">Monto a encontrar (USD)</label><input type="text" id="xrp-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="xrp-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="xrp-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="xrp-preview"></div>
-                    </div>
+                    </details>
 
-                    <div class="coin-config" data-coin="doge">
-                        <div class="coin-header"><span class="coin-badge">DOGE</span><span class="coin-price">$0.12</span></div>
-                        <div class="config-field compact">
-                            <label>Tiempo de acierto (s)</label>
-                            <input type="number" id="doge-time" min="1" max="2147483" step="1" placeholder="Ej. 60">
+                    <details class="coin-config" data-coin="doge">
+                        <summary class="coin-header" aria-controls="doge-fields">
+                            <span class="coin-icon-tile" aria-hidden="true"></span>
+                            <span class="coin-summary-copy"><span class="coin-summary-title"><span class="coin-summary-symbol">DOGE</span><span class="coin-summary-name">Dogecoin</span></span><span class="coin-row-status">Sin configurar</span></span>
+                            <span class="coin-price">$0.12</span><span class="coin-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="coin-fields" id="doge-fields">
+                            <div class="config-field compact"><label for="doge-time">Tiempo de acierto (s)</label><input type="number" id="doge-time" min="1" max="2147483" step="1" placeholder="Ej. 60"></div>
+                            <div class="config-field compact"><label for="doge-usd">Monto a encontrar (USD)</label><input type="text" id="doge-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100"></div>
+                            <div class="coin-preview" id="doge-preview"></div>
                         </div>
-                        <div class="config-field compact">
-                            <label>Monto a encontrar (USD)</label>
-                            <input type="text" id="doge-usd" inputmode="decimal" autocomplete="off" placeholder="Ej. 100">
-                        </div>
-                        <div class="coin-preview" id="doge-preview"></div>
-                    </div>
+                    </details>
                 </div>
 
                 <button class="start-btn" id="startBtn" onclick="startSimulation()" disabled>
@@ -2593,6 +2780,21 @@
                     incompleteCount++;
                 } else if (rowStarted) {
                     activeCount++;
+                }
+
+                const row = timeInput?.closest('.coin-config');
+                if (row) {
+                    const hasError = rowStarted && (!validTime || !validAmount);
+                    row.classList.toggle('has-error', hasError);
+                    row.classList.toggle('is-configured', rowStarted && !hasError);
+                    const status = row.querySelector('.coin-row-status');
+                    if (status) {
+                        status.textContent = hasError
+                            ? 'Completa datos'
+                            : rowStarted
+                                ? 'Lista'
+                                : 'Sin configurar';
+                    }
                 }
 
                 if (timeInput) {
@@ -3240,6 +3442,24 @@
                         element.addEventListener('input', updateCoinPreviews);
                     }
                 });
+            });
+
+            const coinRows = Array.from(document.querySelectorAll('.coin-config'));
+            coinRows.forEach((row) => {
+                const symbol = row.dataset.coin?.toUpperCase();
+                const iconTile = row.querySelector('.coin-icon-tile');
+                const summary = row.querySelector('summary');
+                if (symbol && iconTile) iconTile.innerHTML = getCoinIcon(symbol);
+
+                row.addEventListener('toggle', () => {
+                    if (summary) summary.setAttribute('aria-expanded', String(row.open));
+                    if (row.open) {
+                        coinRows.forEach((otherRow) => {
+                            if (otherRow !== row) otherRow.open = false;
+                        });
+                    }
+                });
+                if (summary) summary.setAttribute('aria-expanded', String(row.open));
             });
         }
 
