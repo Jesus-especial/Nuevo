@@ -2240,7 +2240,58 @@
             }
         }
 
+        .terminal-titlebar {
+            display: none;
+        }
+
         @media (max-width: 520px) {
+            .terminal-titlebar {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 8px;
+                flex: 0 0 auto;
+                margin-bottom: 10px;
+            }
+
+            .stat-chip {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                padding: 7px 10px 8px;
+                border: 1px solid var(--border);
+                border-left: 3px solid #00f3ff;
+                border-radius: 8px;
+                background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+            }
+
+            .stat-chip.found {
+                border-left-color: var(--success);
+            }
+
+            .stat-label {
+                color: var(--text-muted);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 1.2px;
+                text-transform: uppercase;
+            }
+
+            .stat-value {
+                overflow: hidden;
+                color: var(--text);
+                font-family: "Cascadia Code", Consolas, monospace;
+                font-size: 14px;
+                font-weight: 700;
+                font-variant-numeric: tabular-nums;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .stat-chip.found .stat-value {
+                color: var(--success);
+            }
+
             .app-header-card {
                 padding: 7px 10px;
             }
@@ -2933,6 +2984,7 @@
         <div class="workspace">
             <!-- Terminal Principal -->
             <div class="terminal" id="terminal">
+                <div class="terminal-titlebar" id="terminalTitleStats"></div>
                 <div class="terminal-content" id="terminalContent"></div>
             </div>
 
@@ -3767,7 +3819,8 @@
             const setupIsVisible = !configScreen.classList.contains('hidden');
             const launchIsVisible = !launchScreen.classList.contains('hidden');
             const resultsScreenIsVisible = !setupIsVisible && !launchIsVisible;
-            panel.classList.toggle('hidden', !resultsScreenIsVisible || !isRunning);
+            const keepPanelVisible = window.matchMedia('(max-width: 760px)').matches;
+            panel.classList.toggle('hidden', !resultsScreenIsVisible || (!isRunning && !keepPanelVisible));
             document.querySelector('.workspace').classList.toggle('hidden', !resultsScreenIsVisible);
             document.querySelector('.bottom-bar').classList.toggle('hidden', !resultsScreenIsVisible);
         }
@@ -3843,8 +3896,14 @@
         /* Inspections sin comas ni puntos, número unido */
         function updateTitleStats() {
             const totalUSD = foundWallets.reduce((sum, wallet) => sum + Number(wallet.usd || 0), 0);
-            document.getElementById('titleStats').textContent = 
-                `Inspections ${inspectionCount} (Found $${formatMoney(totalUSD)})`;
+            const statsText = `Inspections ${inspectionCount} (Found $${formatMoney(totalUSD)})`;
+            document.getElementById('titleStats').textContent = statsText;
+            const terminalStats = document.getElementById('terminalTitleStats');
+            if (terminalStats) {
+                terminalStats.innerHTML =
+                    `<div class="stat-chip"><span class="stat-label">Inspections</span><span class="stat-value">${inspectionCount}</span></div>` +
+                    `<div class="stat-chip found"><span class="stat-label">Found</span><span class="stat-value">$${formatMoney(totalUSD)}</span></div>`;
+            }
         }
         
         function updateButtons() {
