@@ -12,18 +12,13 @@
             box-sizing: border-box;
         }
         
-        html {
-            min-height: 100%;
+        html, body {
+            height: 100%;
             width: 100%;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         
         body {
-            min-height: 100vh;
-            height: auto;
-            width: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
             font-family: 'JetBrains Mono', monospace;
             background: #000;
             color: #ff4444;
@@ -98,10 +93,10 @@
         /* Contenedor principal */
         .main-container {
             flex: 1;
-            min-height: calc(100vh - 42px);
+            min-height: 0;
             display: flex;
             flex-direction: column;
-            overflow: visible;
+            overflow: hidden;
             position: relative;
         }
         
@@ -2362,6 +2357,13 @@
             }
         }
 
+        @media (max-width: 760px) {
+            .config-field.compact input,
+            .config-field select {
+                font-size: 16px;
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .launch-logo {
                 animation: none;
@@ -2626,27 +2628,8 @@
             .launch-screen {
                 top: 53px;
             }
-
-            .main-container {
-                min-height: calc(100vh - 42px);
-            }
         }
 
-        .config-screen:not(.hidden),
-        .launch-screen:not(.hidden) {
-            position: relative;
-            inset: auto;
-            flex: 1 0 auto;
-            min-height: calc(100vh - 103px);
-            overflow: visible;
-        }
-
-        @media (max-width: 760px) {
-            .config-screen:not(.hidden),
-            .launch-screen:not(.hidden) {
-                min-height: calc(100vh - 95px);
-            }
-        }
     </style>
 </head>
 <body>
