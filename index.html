@@ -907,13 +907,6 @@
             padding: 14px;
         }
 
-        .wallet-log-total {
-            margin-bottom: 12px;
-            color: #00ff66;
-            font-weight: bold;
-            overflow-wrap: anywhere;
-        }
-
         .wallet-log-hit {
             margin-bottom: 8px;
             color: #f0c76a;
@@ -934,6 +927,55 @@
             color: #e6eee8;
             font-weight: normal;
             overflow-wrap: anywhere;
+        }
+
+        .wallet-log-seed-row {
+            display: flex;
+            align-items: flex-start;
+            min-width: 0;
+            gap: 10px;
+        }
+
+        .wallet-log-seed-row strong {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .wallet-log-copy {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 32px;
+            padding: 0 10px;
+            border: 1px solid #3f694e;
+            border-radius: 6px;
+            background: #18241c;
+            color: #9cdbad;
+            font: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .wallet-log-copy:hover,
+        .wallet-log-copy:focus-visible,
+        .wallet-log-copy.copied {
+            border-color: var(--success);
+            background: #20352a;
+            color: #b3efc3;
+            outline: none;
+        }
+
+        .wallet-log-copy svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .wallet-log-sensitivity {
@@ -1808,8 +1850,11 @@
 
         .terminal {
             min-width: 0;
+            margin-inline: 12px;
             background: #0e1115;
             padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .terminal::after {
@@ -1874,12 +1919,13 @@
         }
 
         .side-section-header {
-            padding: 12px 14px;
+            min-height: 36px;
+            padding: 4px 12px;
             border-bottom-color: var(--border);
             background: var(--surface);
             color: #c5cbd2;
             font-family: "Segoe UI", "Segoe UI Variable", Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 0.3px;
         }
 
@@ -2176,7 +2222,6 @@
             color: var(--text);
         }
 
-        .wallet-log-total,
         .wallet-log-reveal {
             color: var(--success);
         }
@@ -2189,6 +2234,20 @@
 
         .wallet-log-reveal:hover {
             background: #20352a;
+        }
+
+        body.light-mode .wallet-log-copy {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        body.light-mode .wallet-log-copy:hover,
+        body.light-mode .wallet-log-copy:focus-visible,
+        body.light-mode .wallet-log-copy.copied {
+            border-color: #86efac;
+            background: #dcfce7;
+            color: #14532d;
         }
 
         .wallet-log-warning,
@@ -2258,6 +2317,7 @@
             .workspace {
                 flex-direction: column;
                 overflow-y: auto;
+                row-gap: 12px;
             }
 
             .terminal-column {
@@ -3141,6 +3201,300 @@
             opacity: 0.9;
         }
 
+        .wallet-log-modal {
+            width: min(640px, 100%);
+            max-height: min(88vh, 720px);
+            border-radius: var(--radius-panel);
+        }
+
+        .wallet-log-header {
+            min-height: 56px;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .wallet-log-close {
+            width: 32px;
+            height: 32px;
+            border-color: var(--border);
+            border-radius: var(--radius-control);
+            background: var(--surface-raised);
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        .wallet-log-close:hover {
+            border-color: var(--success);
+            background: rgba(82, 196, 124, 0.1);
+            color: var(--success);
+        }
+
+        .wallet-log-content {
+            padding: 18px 20px 20px;
+        }
+
+        .wallet-log-hit {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 0 14px;
+            padding: 4px 9px;
+            border: 1px solid rgba(82, 196, 124, 0.28);
+            border-radius: 999px;
+            background: rgba(82, 196, 124, 0.08);
+            color: var(--success);
+            font-size: 11px;
+        }
+
+        .wallet-log-fields {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+            padding: 4px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-control);
+            background: var(--surface-muted);
+        }
+
+        .wallet-log-fields .wallet-log-field {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wallet-log-fields .wallet-log-field span,
+        .wallet-log-field-label {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .wallet-log-fields .wallet-log-field strong {
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .wallet-log-fields .wallet-log-field:last-child {
+            border-bottom: 0;
+        }
+
+        .wallet-log-seed-section {
+            margin-top: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wallet-log-seed-row {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .wallet-log-seed-row strong {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface-muted);
+            color: var(--text);
+            font-family: "Cascadia Code", Consolas, monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            white-space: normal;
+        }
+
+        .wallet-log-seed-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .wallet-log-copy,
+        .wallet-log-reveal {
+            display: inline-flex;
+            min-height: 36px;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 12px;
+            border: 1px solid #3f694e;
+            border-radius: var(--radius-control);
+            background: #18241c;
+            color: #9cdbad;
+            font: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+        }
+
+        .wallet-log-copy:hover,
+        .wallet-log-copy:focus-visible,
+        .wallet-log-copy.copied,
+        .wallet-log-reveal:hover,
+        .wallet-log-reveal:focus-visible {
+            border-color: var(--success);
+            background: #20352a;
+            color: #b3efc3;
+            outline: none;
+        }
+
+        .wallet-log-copy svg,
+        .wallet-log-reveal svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .wallet-log-balance-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0 4px;
+        }
+
+        .wallet-log-balance-row span {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .wallet-log-balance-row strong {
+            color: var(--success);
+            font-family: "Cascadia Code", Consolas, monospace;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .wallet-log-sensitivity {
+            display: block;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .wallet-log-warning {
+            color: var(--text-muted);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        body.light-mode .wallet-log-copy,
+        body.light-mode .wallet-log-reveal {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        body.light-mode .wallet-log-copy:hover,
+        body.light-mode .wallet-log-copy:focus-visible,
+        body.light-mode .wallet-log-copy.copied,
+        body.light-mode .wallet-log-reveal:hover,
+        body.light-mode .wallet-log-reveal:focus-visible {
+            border-color: #86efac;
+            background: #dcfce7;
+            color: #14532d;
+        }
+
+        body.light-mode .wallet-log-seed-row strong {
+            color: #1e293b;
+        }
+
+        body.light-mode .wallet-log-balance-row strong {
+            color: #166534;
+        }
+
+        @media (max-width: 640px) {
+            .wallet-log-fields {
+                grid-template-columns: minmax(0, 1fr);
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .wallet-log-content {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .wallet-log-fields {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .wallet-log-seed-actions {
+                justify-content: stretch;
+            }
+
+            .wallet-log-seed-actions button {
+                flex: 1 1 0;
+            }
+        }
+
+        .sidebar-right {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+        }
+
+        .sidebar-right > .side-section-header {
+            margin: 0;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
+        }
+
+        .sidebar-right > .found-wallets-container {
+            margin: 0;
+            border: 0;
+            border-radius: 0;
+            background: var(--surface);
+        }
+
+        @media (min-width: 761px) {
+            .terminal {
+                margin-right: 0;
+            }
+
+            .terminal-titlebar {
+                margin-right: 0;
+            }
+
+            .sidebar-right {
+                margin-inline: 12px;
+            }
+
+            .terminal-column {
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .sidebar-right {
+                width: auto;
+                margin-inline: 12px;
+                align-self: stretch;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -3492,19 +3846,40 @@
                 <button class="wallet-log-close" type="button" onclick="closeWalletLog()" aria-label="Cerrar ventana">&times;</button>
             </div>
             <div class="wallet-log-content">
-                <div class="wallet-log-total" id="walletLogTotal"></div>
                 <div class="wallet-log-hit" id="walletLogHit"></div>
                 <div class="wallet-log-fields">
-                    <span>Date and time:</span><strong id="walletLogDate"></strong>
-                    <span>Scan Speed:</span><strong id="walletLogSpeed"></strong>
-                    <span>Type:</span><strong id="walletLogType"></strong>
-                    <span>Address:</span><strong id="walletLogAddress"></strong>
-                    <span>Seed:</span><strong id="walletLogSeed"></strong>
-                    <span>Balance:</span><strong id="walletLogBalance"></strong>
+                    <div class="wallet-log-field"><span>Date and time</span><strong id="walletLogDate"></strong></div>
+                    <div class="wallet-log-field"><span>Scan Speed</span><strong id="walletLogSpeed"></strong></div>
+                    <div class="wallet-log-field"><span>Type</span><strong id="walletLogType"></strong></div>
+                </div>
+                <div class="wallet-log-seed-section">
+                    <span class="wallet-log-field-label">Seed</span>
+                    <div class="wallet-log-seed-row">
+                        <strong id="walletLogSeed"></strong>
+                    </div>
+                    <div class="wallet-log-seed-actions">
+                        <button class="wallet-log-copy" id="walletLogCopySeed" type="button" onclick="copyWalletLogSeed()" aria-label="Copiar seed" title="Copiar seed">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                <path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path>
+                            </svg>
+                            <span class="wallet-log-copy-label" id="walletLogCopyLabel">Copiar</span>
+                        </button>
+                        <button class="wallet-log-reveal" id="walletLogReveal" type="button" onclick="toggleWalletLogReveal()" aria-label="Mostrar seed" title="Mostrar seed">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span id="walletLogRevealLabel">Mostrar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="wallet-log-balance-row">
+                    <span>Balance</span>
+                    <strong id="walletLogBalance"></strong>
                 </div>
                 <div class="wallet-log-sensitivity">
                     <span class="wallet-log-warning">Simulación: estos datos generados no son wallets reales.</span>
-                    <button class="wallet-log-reveal" id="walletLogReveal" type="button" onclick="toggleWalletLogReveal()">Mostrar</button>
                 </div>
             </div>
         </section>
@@ -4203,25 +4578,24 @@
 
             const network = wallet.network || 'BTC';
             const networkWallets = foundWallets.filter((item) => (item.network || 'BTC') === network);
-            const networkTotalAmount = networkWallets.reduce((sum, item) => sum + Number(item.cryptoAmount || item.btc || 0), 0);
-            const networkTotalUSD = networkWallets.reduce((sum, item) => sum + Number(item.usd || 0), 0);
             const hitNumber = networkWallets.indexOf(wallet) + 1;
             const cryptoAmount = Number(wallet.cryptoAmount || wallet.btc || 0);
             const amountText = formatCryptoAmount(network, cryptoAmount);
             const usdText = formatMoney(Number(wallet.usd || 0));
 
             document.getElementById('walletLogTitle').textContent = `${network} WALLET LOG`;
-            document.getElementById('walletLogTotal').textContent =
-                `[${network}] TOTAL ${formatCryptoAmount(network, networkTotalAmount)} ${network} // $${formatMoney(networkTotalUSD)} USD`;
             document.getElementById('walletLogHit').textContent = `HIT ${hitNumber}`;
             document.getElementById('walletLogDate').textContent = wallet.date || '';
             document.getElementById('walletLogSpeed').textContent = wallet.scanSpeed || '0 keys/s';
             document.getElementById('walletLogType').textContent = 'VALID';
-            document.getElementById('walletLogAddress').textContent = maskWalletAddress(wallet.address);
             document.getElementById('walletLogSeed').textContent = maskWalletSeed(wallet.mnemonic);
             document.getElementById('walletLogBalance').textContent =
                 `${amountText} ${network} ($${usdText} USD)`;
-            document.getElementById('walletLogReveal').textContent = 'Mostrar';
+            document.getElementById('walletLogRevealLabel').textContent = 'Mostrar';
+            document.getElementById('walletLogReveal').title = 'Mostrar seed';
+            document.getElementById('walletLogReveal').setAttribute('aria-label', 'Mostrar seed');
+            document.getElementById('walletLogCopyLabel').textContent = 'Copiar';
+            document.getElementById('walletLogCopySeed').classList.remove('copied');
             document.getElementById('walletLogOverlay').classList.add('show');
             document.getElementById('walletLogOverlay').dataset.walletIndex = String(walletIndex);
             document.getElementById('walletLogReveal').dataset.revealed = 'false';
@@ -4234,12 +4608,60 @@
 
             const revealButton = document.getElementById('walletLogReveal');
             const revealed = revealButton.dataset.revealed !== 'true';
-            document.getElementById('walletLogAddress').textContent =
-                revealed ? wallet.address : maskWalletAddress(wallet.address);
             document.getElementById('walletLogSeed').textContent =
                 revealed ? wallet.mnemonic : maskWalletSeed(wallet.mnemonic);
             revealButton.dataset.revealed = String(revealed);
-            revealButton.textContent = revealed ? 'Ocultar' : 'Mostrar';
+            const revealLabel = revealed ? 'Ocultar' : 'Mostrar';
+            document.getElementById('walletLogRevealLabel').textContent = revealLabel;
+            revealButton.title = `${revealLabel} seed`;
+            revealButton.setAttribute('aria-label', `${revealLabel} seed`);
+        }
+
+        async function copyWalletLogSeed() {
+            const overlay = document.getElementById('walletLogOverlay');
+            const wallet = foundWallets[Number(overlay.dataset.walletIndex)];
+            const copyButton = document.getElementById('walletLogCopySeed');
+            const copyLabel = document.getElementById('walletLogCopyLabel');
+            if (!wallet?.mnemonic || !copyButton || !copyLabel) return;
+
+            let copied = false;
+            try {
+                if (navigator.clipboard?.writeText) {
+                    await navigator.clipboard.writeText(wallet.mnemonic);
+                    copied = true;
+                }
+            } catch {
+                copied = false;
+            }
+
+            if (!copied) {
+                const temporaryInput = document.createElement('textarea');
+                temporaryInput.value = wallet.mnemonic;
+                temporaryInput.setAttribute('readonly', '');
+                temporaryInput.style.position = 'fixed';
+                temporaryInput.style.opacity = '0';
+                temporaryInput.style.pointerEvents = 'none';
+                document.body.appendChild(temporaryInput);
+                temporaryInput.select();
+                try {
+                    copied = document.execCommand('copy');
+                } catch {
+                    copied = false;
+                }
+                temporaryInput.remove();
+            }
+
+            copyButton.classList.toggle('copied', copied);
+            copyLabel.textContent = copied ? 'Copiado' : 'No copiado';
+            copyButton.title = copied ? 'Seed copiada' : 'No se pudo copiar la seed';
+            copyButton.setAttribute('aria-label', copyButton.title);
+            window.setTimeout(() => {
+                if (!copyButton.isConnected) return;
+                copyButton.classList.remove('copied');
+                copyLabel.textContent = 'Copiar';
+                copyButton.title = 'Copiar seed';
+                copyButton.setAttribute('aria-label', 'Copiar seed');
+            }, 1600);
         }
 
         function closeWalletLog() {
