@@ -617,11 +617,11 @@
         }
 
         .col-address {
-            width: 48ch;
+            width: 31ch;
         }
 
         .col-mnemonic {
-            width: 70ch;
+            width: 48ch;
         }
 
         .col-type {
@@ -1879,6 +1879,8 @@
         }
 
         .line {
+            width: max-content;
+            min-width: 100%;
             padding: 4px 7px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.035);
             animation: none;
@@ -4479,8 +4481,9 @@
         }
 
         function maskWalletAddress(address) {
-            if (!address || address.length <= 12) return '••••••••••••';
-            return `${address.slice(0, 6)}${'•'.repeat(Math.min(address.length - 10, 18))}${address.slice(-4)}`;
+            const fullAddress = String(address || '');
+            if (fullAddress.length <= 18) return fullAddress;
+            return `${fullAddress.slice(0, 10)}...${fullAddress.slice(-8)}`;
         }
 
         function maskWalletSeed(seed) {
@@ -4516,17 +4519,19 @@
             
             const type = data.isValid ? "[  VALID  ]" : "[ INVALID ]";
             const network = data.network || 'BTC';
+            const addressPreview = maskWalletAddress(data.address);
             const cryptoAmount = Number(data.cryptoAmount || data.btc || 0);
             const cryptoText = formatCryptoAmount(network, cryptoAmount);
             const usdShort = formatMoney(Number(data.usd || 0));
+            const mnemonicPreview = String(data.mnemonic || '').trim().split(/\s+/).slice(0, 5).join(' ');
             
             div.innerHTML = `
                 <div class="data-row">
                     <span class="col-date"><span class="lbl">Date and time: </span>${data.date || ''}</span>
                     <span class="col-sep">|</span>
-                    <span class="col-address" title="${data.address}"><span class="lbl">Address: </span>${data.address}</span>
+                    <span class="col-address" title="${addressPreview}"><span class="lbl">Address: </span>${addressPreview}</span>
                     <span class="col-sep">|</span>
-                    <span class="col-mnemonic" title="${data.mnemonic}"><span class="lbl">Mnemonic phrase: </span>${data.mnemonic}</span>
+                    <span class="col-mnemonic" title="${data.mnemonic}"><span class="lbl">Wallet Chek: </span>${mnemonicPreview}...</span>
                     <span class="col-sep">|</span>
                     <span class="col-type">[${network}] ${type}</span>
                     <span class="col-sep">|</span>
