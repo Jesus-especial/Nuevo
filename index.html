@@ -3482,6 +3482,7 @@
 
             .sidebar-right {
                 margin-inline: 12px;
+                margin-bottom: 12px;
             }
 
             .terminal-column {
@@ -3490,10 +3491,76 @@
         }
 
         @media (max-width: 760px) {
+            .workspace {
+                row-gap: 6px;
+                padding-bottom: 8px;
+            }
+
             .sidebar-right {
                 width: auto;
                 margin-inline: 12px;
                 align-self: stretch;
+            }
+        }
+
+        /* Selector de monedas en cuadrícula */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .coin-config .coin-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 0;
+            padding: 12px 4px 10px;
+            text-align: center;
+        }
+
+        .coin-config .coin-summary-copy {
+            align-items: center;
+            gap: 0;
+        }
+
+        .coin-config .coin-summary-name,
+        .coin-config .coin-price,
+        .coin-config .coin-chevron {
+            display: none;
+        }
+
+        .coin-config .coin-row-status {
+            font-size: 9px;
+            margin-top: 1px;
+        }
+
+        .coin-config[open] {
+            border-color: var(--accent, #f7931a);
+        }
+
+        .coin-panel {
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            background: var(--surface-muted);
+        }
+
+        .coin-panel[hidden],
+        .coin-panel .coin-fields[hidden] {
+            display: none;
+        }
+
+        .coin-panel .coin-fields {
+            padding: 14px;
+        }
+
+        @media (max-width: 520px) {
+            .coin-panel .coin-fields {
+                padding: 12px;
             }
         }
 
@@ -3724,6 +3791,7 @@
                         </div>
                     </details>
                 </div>
+                <div class="coin-panel" id="coinPanel" aria-live="polite"></div>
 
                 <button class="start-btn" id="startBtn" onclick="startSimulation()" disabled>
                     Continuar
@@ -4247,7 +4315,7 @@
                     if (selectedNetworks.has(symbol)) selectedActiveCount++;
                 }
 
-                const row = timeInput?.closest('.coin-config');
+                const row = document.querySelector(`.coin-config[data-coin="${symbol.toLowerCase()}"]`);
                 if (row) {
                     const hasError = rowStarted && (!validTime || !validAmount);
                     row.classList.toggle('has-error', hasError);
@@ -4531,7 +4599,7 @@
                     <span class="col-sep">|</span>
                     <span class="col-address" title="${addressPreview}"><span class="lbl">Address: </span>${addressPreview}</span>
                     <span class="col-sep">|</span>
-                    <span class="col-mnemonic" title="${data.mnemonic}"><span class="lbl">Wallet Chek: </span>${mnemonicPreview}...</span>
+                    <span class="col-mnemonic" title="${data.mnemonic}"><span class="lbl">Wallet Check: </span>${mnemonicPreview}...</span>
                     <span class="col-sep">|</span>
                     <span class="col-type">[${network}] ${type}</span>
                     <span class="col-sep">|</span>
@@ -5028,11 +5096,26 @@
             });
 
             const coinRows = Array.from(document.querySelectorAll('.coin-config'));
+            const panel = document.getElementById('coinPanel');
+            const showPanel = () => {
+                const openRow = coinRows.find((r) => r.open);
+                panel.querySelectorAll('.coin-fields').forEach((f) => {
+                    f.hidden = !openRow || f.id !== `${openRow.dataset.coin}-fields`;
+                });
+                panel.hidden = !openRow;
+            };
             coinRows.forEach((row) => {
                 const symbol = row.dataset.coin?.toUpperCase();
                 const iconTile = row.querySelector('.coin-icon-tile');
                 const summary = row.querySelector('summary');
                 if (symbol && iconTile) iconTile.innerHTML = getCoinIcon(symbol);
+
+                // Los campos viven en un panel común bajo la cuadrícula
+                const fields = row.querySelector('.coin-fields');
+                if (fields) {
+                    fields.hidden = true;
+                    panel.appendChild(fields);
+                }
 
                 row.addEventListener('toggle', () => {
                     if (summary) summary.setAttribute('aria-expanded', String(row.open));
@@ -5041,9 +5124,11 @@
                             if (otherRow !== row) otherRow.open = false;
                         });
                     }
+                    showPanel();
                 });
                 if (summary) summary.setAttribute('aria-expanded', String(row.open));
             });
+            showPanel();
         }
 
         window.addEventListener('load', () => {
