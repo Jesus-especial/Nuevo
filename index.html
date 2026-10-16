@@ -1794,7 +1794,16 @@
         }
 
         .workspace {
-            background: var(--app-bg);
+            background: var(--surface);
+        }
+
+        .terminal-column {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            padding-top: 2px;
         }
 
         .terminal {
@@ -1911,7 +1920,7 @@
         .wallet-search-panel {
             flex: 0 0 auto;
             padding: 12px 16px 14px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 0;
             background: var(--surface);
         }
 
@@ -2251,6 +2260,11 @@
                 overflow-y: auto;
             }
 
+            .terminal-column {
+                flex: 1 0 279px;
+                min-height: 279px;
+            }
+
             .terminal {
                 flex: 1 0 220px;
                 min-height: 220px;
@@ -2274,6 +2288,7 @@
 
         .terminal-titlebar {
             display: none;
+            margin-inline: 12px;
         }
 
         @media (max-width: 520px) {
@@ -2292,13 +2307,13 @@
                 gap: 2px;
                 padding: 7px 10px 8px;
                 border: 1px solid var(--border);
-                border-left: 3px solid #00f3ff;
+                border-left: 2px solid rgba(82, 196, 124, 0.52);
                 border-radius: 8px;
-                background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+                background: var(--surface);
             }
 
             .stat-chip.found {
-                border-left-color: var(--success);
+                border-left-color: rgba(82, 196, 124, 0.72);
             }
 
             .stat-label {
@@ -2456,13 +2471,13 @@
                 gap: 2px;
                 padding: 7px 10px 8px;
                 border: 1px solid var(--border);
-                border-left: 3px solid #00f3ff;
+                border-left: 2px solid rgba(82, 196, 124, 0.52);
                 border-radius: 8px;
-                background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+                background: var(--surface);
             }
 
             .stat-chip.found {
-                border-left-color: var(--success);
+                border-left-color: rgba(82, 196, 124, 0.72);
             }
 
             .stat-label {
@@ -2516,13 +2531,13 @@
                 gap: 2px;
                 padding: 7px 10px 8px;
                 border: 1px solid var(--border);
-                border-left: 3px solid #00f3ff;
+                border-left: 2px solid rgba(82, 196, 124, 0.52);
                 border-radius: 8px;
-                background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+                background: var(--surface);
             }
 
             .stat-chip.found {
-                border-left-color: var(--success);
+                border-left-color: rgba(82, 196, 124, 0.72);
             }
 
             .stat-label {
@@ -2657,7 +2672,7 @@
         }
 
         body.light-mode .workspace {
-            background: var(--app-bg);
+            background: var(--surface);
         }
 
         body.light-mode .terminal {
@@ -3427,10 +3442,12 @@
         
         <!-- Área de trabajo -->
         <div class="workspace">
-            <!-- Terminal Principal -->
-            <div class="terminal" id="terminal">
+            <div class="terminal-column">
                 <div class="terminal-titlebar" id="terminalTitleStats"></div>
-                <div class="terminal-content" id="terminalContent"></div>
+                <!-- Terminal Principal -->
+                <div class="terminal" id="terminal">
+                    <div class="terminal-content" id="terminalContent"></div>
+                </div>
             </div>
 
             <!-- Panel lateral de hallazgos -->
